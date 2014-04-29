@@ -1,4 +1,4 @@
-{application, myapp,
+{application, kitty_server,
  [
   {description, ""},
   {vsn, "1"},
