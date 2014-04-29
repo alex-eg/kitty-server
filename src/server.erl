@@ -7,11 +7,12 @@
 -include("records.hrl").
 
 init(State) ->
-    NewState = wait_for_connection(State),
+    NewState = wait_for_connection(#serv_state{state = State}),
     {ok, NewState}.
 
-wait_for_connection(State) ->
+wait_for_connection(ServState) ->
     log:info("Waiting for connection!"),
+    State = ServState#serv_state.state,
     {ok, Socket} = gen_tcp:listen(State#state.port,
                                   [inet,
                                    {active, once},

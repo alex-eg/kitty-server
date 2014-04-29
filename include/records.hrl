@@ -4,4 +4,5 @@
          type}).
 
 -record(serv_state,
-        {sock}).
+        {state = #state{},
+         sock}).
