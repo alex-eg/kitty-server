@@ -5,7 +5,9 @@
 -export([init/1, code_change/3, handle_call/3, handle_cast/2, handle_info/2, terminate/2]).
 
 -include("records.hrl").
-
+-record(serv_state,
+        {state = #state{},
+         sock}).
 init(State) ->
     log:info("Client is starting!"),
     {ok, Socket} = gen_tcp:connect(State#state.addr,
