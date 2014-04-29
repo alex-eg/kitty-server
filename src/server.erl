@@ -7,14 +7,18 @@
 -include("records.hrl").
 
 init(State) ->
-    log:info("Server is starting!"),
+    NewState = wait_for_connection(State),
+    {ok, NewState}.
+
+wait_for_connection(State) ->
+    log:info("Waiting for connection!"),
     {ok, Socket} = gen_tcp:listen(State#state.port,
                                   [inet,
                                    {active, once},
                                    list]),
     {ok, Accepted} = gen_tcp:accept(Socket),
     log:info("Incoming connection! :33"),
-    {ok, #serv_state{sock = Accepted}}.
+    #serv_state{sock = Accepted}.
 
 handle_call(Any, _Caller, State) ->
     log:info("Unknown call: ~p", [Any]),
@@ -32,6 +36,11 @@ handle_info({tcp, _From, Data}, State) ->
     ok = inet:setopts(State#serv_state.sock, [{active, once}]),
     io:fwrite("~n<<< ~ts", [Data]),
     {noreply, State};
+handle_info({tcp_closed, _}, State) ->
+    log:info("~nClient closed connection!", []),
+    gen_tcp:close(State#serv_state.sock),
+    NewState = wait_for_connection(State)
+    {noreply, NewState};
 handle_info(Any, State) ->
     log:info("Some info: ~p", [Any]),
     {noreply, State}.

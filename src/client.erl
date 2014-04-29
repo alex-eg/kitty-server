@@ -32,7 +32,7 @@ handle_info({tcp, _From, Data}, State) ->
     io:fwrite("~n<<< ~ts", [Data]),
     {noreply, State};
 handle_info({tcp_closed, _}, State) ->
-    log:info("~nServer closed connection!"),
+    log:info("~nServer closed connection!", []),
     {noreply, State};
 handle_info(Any, State) ->
     log:info("Some info: ~p", [Any]),
