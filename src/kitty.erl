@@ -24,7 +24,7 @@ start(server, {Addr, Port}) ->
     start_io(State).
 
 start_io(State) ->
-    Line = io:get_line("?- "),
+    Line = io:get_line("?-- "),
     send_line(Line, State).
 
 send_line(eof, _) ->
