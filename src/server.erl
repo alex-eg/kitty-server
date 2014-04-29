@@ -30,7 +30,7 @@ handle_cast(Any, State) ->
 
 handle_info({tcp, _From, Data}, State) ->
     ok = inet:setopts(State#serv_state.sock, [{active, once}]),
-    log:info("~n>>> ~ts", [Data]),
+    io:fwrite("~n<<< ~ts", [Data]),
     {noreply, State};
 handle_info(Any, State) ->
     log:info("Some info: ~p", [Any]),
