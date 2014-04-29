@@ -39,7 +39,7 @@ handle_info({tcp, _From, Data}, State) ->
 handle_info({tcp_closed, _}, State) ->
     log:info("~nClient closed connection!", []),
     gen_tcp:close(State#serv_state.sock),
-    NewState = wait_for_connection(State)
+    NewState = wait_for_connection(State),
     {noreply, NewState};
 handle_info(Any, State) ->
     log:info("Some info: ~p", [Any]),
