@@ -15,6 +15,10 @@ init(State) ->
                                     list]),
     {ok, #serv_state{sock = Socket}}.
 
+handle_call(shutdown, _Caller, State) ->
+    ok = gen_tcp:shutdown(State#serv_state.sock, read_write),
+    log:info("Shutting down client..."),
+    {stop, normal, ok, State};
 handle_call(Any, _Caller, State) ->
     log:info("Unknown call: ~p", [Any]),
     {noreply, State}.
