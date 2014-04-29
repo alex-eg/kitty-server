@@ -27,8 +27,9 @@ start_io(State) ->
     Line = io:get_line("?-- "),
     send_line(Line, State).
 
-send_line(eof, _) ->
+send_line(eof, State) ->
     io:fwrite("~nGood bye!~n"),
+    gen_server:call(State#state.type, shutdown),
     normal;
 send_line(Line, State) ->
     gen_server:cast(State#state.type, {send, Line}),
