@@ -5,9 +5,15 @@
 -include("records.hrl").
 
 start([server]) ->
-    start(server, {{127,0,0,1}, 3456});
+    {ok, [Config]} = file:consult("priv/cfg.erl"),
+    Addr = proplists:get_value(bind_addr, Config),
+    Port = proplists:get_value(listen_port, Config),
+    start(server, {Addr, Port});
 start([client]) ->
-    start(client, {{127,0,0,1}, 3456});
+    {ok, [Config]} = file:consult("priv/cfg.erl"),
+    Addr = proplists:get_value(connect_addr, Config),
+    Port = proplists:get_value(connect_port, Config),
+    start(client, {Addr, Port});
 start([_Any]) ->
     io:fwrite("What do you think you're doing, Dave?~n"),
     normal.
